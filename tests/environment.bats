@@ -26,7 +26,6 @@ load '/usr/local/lib/bats/load.bash'
 
   run bash -c "source $PWD/hooks/environment && env"
   assert_success
-  assert_output --partial "Successfully authenticated with Vault"
   assert_output --partial "VAULT_TOKEN=s.mocktoken"
 
   unset BUILDKITE_PIPELINE_SLUG
@@ -48,7 +47,6 @@ load '/usr/local/lib/bats/load.bash'
 
   run bash -c "source $PWD/hooks/environment && env"
   assert_success
-  assert_output --partial "Successfully authenticated with Vault"
   assert_output --partial "VAULT_TOKEN=s.mocktoken"
 
   unset BUILDKITE_PIPELINE_SLUG

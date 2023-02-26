@@ -12,7 +12,7 @@ main() {
   local jwt vault_token
 
   if [[ -z "$addr" ]]; then
-    echo "~~~ No 'vault_addr' specified. Skipping Vault authentication."
+    echo -e "~~~ :vault: \033[33mVault OIDC Auth Plugin\033[0m. No 'vault_addr' specified. Skipping Vault authentication."
     exit 0
   fi
 
@@ -25,7 +25,7 @@ main() {
     role="$role" \
     jwt="$jwt"
   )
-  echo "Successfully authenticated with Vault."
+  echo -e "~~~ :vault: \033[33mVault OIDC Auth Plugin\033[0m. Success. VAULT_TOKEN added to the environment."
   export VAULT_TOKEN="$vault_token"
 }
 
