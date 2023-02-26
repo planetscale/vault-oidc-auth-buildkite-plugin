@@ -3,6 +3,11 @@
 
 set -eou pipefail
 
+declare brown="\033[33m"
+declare green="\033[32m"
+declare red="\033[31m"
+declare reset="\033[0m"
+
 main() {
   local addr="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR:-}"
   local path="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_PATH:-auth/buildkite}"
@@ -12,7 +17,7 @@ main() {
   local jwt vault_token
 
   if [[ -z "$addr" ]]; then
-    echo -e "~~~ :vault: \033[33mVault OIDC Auth Plugin\033[0m. No 'vault_addr' specified. Skipping Vault authentication."
+    echo -e "~~~ :vault: ${brown}Vault OIDC Auth Plugin${reset}. No 'vault_addr' specified. ${red}Skipping Vault authentication.${reset}"
     exit 0
   fi
 
@@ -25,7 +30,7 @@ main() {
     role="$role" \
     jwt="$jwt"
   )
-  echo -e "~~~ :vault: \033[33mVault OIDC Auth Plugin\033[0m. Success. VAULT_TOKEN added to the environment."
+  echo -e "~~~ :vault: ${brown}Vault OIDC Auth Plugin${reset}: ${green}OK${reset}: VAULT_TOKEN added to the environment."
   export VAULT_TOKEN="$vault_token"
 }
 
