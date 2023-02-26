@@ -1,0 +1,32 @@
+#!/bin/bash
+# vim: set ft=sh:
+
+set -eou pipefail
+
+main() {
+  local addr="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR:-}"
+  local path="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_PATH:-auth/buildkite}"
+  local role="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ROLE:-$BUILDKITE_PIPELINE_SLUG}"
+  local audience="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_AUDIENCE:-vault}"
+
+  local jwt vault_token
+
+  if [[ -z "$addr" ]]; then
+    echo "~~~ No 'vault_addr' specified. Skipping Vault authentication."
+    exit 0
+  fi
+
+  jwt=$(buildkite-agent oidc request-token --audience "$audience")
+
+  vault_token=$(vault write \
+    -field=token \
+    -address="$addr" \
+    "${path}/login" \
+    role="$role" \
+    jwt="$jwt"
+  )
+  echo "Successfully authenticated with Vault."
+  export VAULT_TOKEN="$vault_token"
+}
+
+main "$@"

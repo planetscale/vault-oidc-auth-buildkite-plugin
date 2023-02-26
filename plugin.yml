@@ -1,0 +1,20 @@
+name: Vault OIDC Auth
+description: Authenticate to Vault with OIDC tokens
+author: https://github.com/planetscale
+requirements:
+  - bash
+  - vault
+  - jq
+configuration:
+  properties:
+    vault_addr:
+      type: string
+    path:
+      type: string
+    role:
+      type: string
+    audience:
+      type: string
+  required:
+    - vault_addr
+  additionalProperties: false
