@@ -4,7 +4,6 @@ author: https://github.com/planetscale
 requirements:
   - bash
   - vault
-  - jq
 configuration:
   properties:
     vault_addr:
