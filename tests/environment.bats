@@ -7,7 +7,7 @@ load '/usr/local/lib/bats/load.bash'
 @test "vault_addr is not set" {
   export BUILDKITE_PIPELINE_SLUG="foo"
 
-  run bash -c "$PWD/hooks/environment"
+  run bash -c "$PWD/hooks/environment && env"
   assert_success
   assert_output --partial "Skipping Vault authentication"
 
@@ -24,9 +24,10 @@ load '/usr/local/lib/bats/load.bash'
   stub vault \
     'write -field=token -address=http://vault:8200 auth/buildkite/login role=foo jwt=eyJfoobar : echo s.mocktoken'
 
-  run bash -c "$PWD/hooks/environment"
+  run bash -c "source $PWD/hooks/environment && env"
   assert_success
   assert_output --partial "Successfully authenticated with Vault"
+  assert_output --partial "VAULT_TOKEN=s.mocktoken"
 
   unset BUILDKITE_PIPELINE_SLUG
   unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR
@@ -45,9 +46,10 @@ load '/usr/local/lib/bats/load.bash'
   stub vault \
     'write -field=token -address=http://vault:8200 auth/jwt/login role=bar jwt=eyJfoobar : echo s.mocktoken'
 
-  run bash -c "$PWD/hooks/environment"
+  run bash -c "source $PWD/hooks/environment && env"
   assert_success
   assert_output --partial "Successfully authenticated with Vault"
+  assert_output --partial "VAULT_TOKEN=s.mocktoken"
 
   unset BUILDKITE_PIPELINE_SLUG
   unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR
