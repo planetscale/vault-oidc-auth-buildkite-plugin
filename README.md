@@ -14,10 +14,10 @@ steps:
   - command: ./run_build.sh
     plugins:
       - planetscale/vault-oidc-auth#v1.0.0:
-          addr: "https://my-vault-server"  # required.
-          path: auth/buildkite             # optional. default "auth/buildkite"
-          role: some-role                  # optional. default "$BUILDKITE_PIPELINE_SLUG"
-          audience: vault                  # optional. default "vault"
+          vault_addr: "https://my-vault-server"  # required.
+          path: auth/buildkite                   # optional. default "auth/buildkite"
+          role: some-role                        # optional. default "$BUILDKITE_PIPELINE_SLUG"
+          audience: vault                        # optional. default "vault"
 ```
 
 If authentication is successful a `VAULT_TOKEN` is added to the environment.
