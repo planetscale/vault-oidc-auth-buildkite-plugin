@@ -13,6 +13,7 @@ main() {
   local path="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_PATH:-auth/buildkite}"
   local role="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ROLE:-$BUILDKITE_PIPELINE_SLUG}"
   local audience="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_AUDIENCE:-vault}"
+  local prefix="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ENV_PREFIX:-}"
 
   local jwt vault_token
 
@@ -30,8 +31,8 @@ main() {
     role="$role" \
     jwt="$jwt"
   )
-  echo -e "~~~ :vault: ${brown}Vault OIDC Auth Plugin${reset}: ${green}OK${reset}: VAULT_TOKEN added to the environment."
-  export VAULT_TOKEN="$vault_token"
+  echo -e "~~~ :vault: ${brown}Vault OIDC Auth Plugin${reset}: ${green}OK${reset}: ${prefix}VAULT_TOKEN added to the environment."
+  export "${prefix}VAULT_TOKEN"="$vault_token"
 }
 
 main "$@"

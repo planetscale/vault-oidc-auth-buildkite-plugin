@@ -55,3 +55,23 @@ load '/usr/local/lib/bats/load.bash'
   unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ROLE
   unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_AUDIENCE
 }
+
+@test "env_prefix" {
+  export BUILDKITE_PIPELINE_SLUG="foo"
+  export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR="http://vault:8200"
+  export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ENV_PREFIX="FOO_"
+
+  stub buildkite-agent \
+    'oidc request-token --audience vault : echo eyJfoobar'
+
+  stub vault \
+    'write -field=token -address=http://vault:8200 auth/buildkite/login role=foo jwt=eyJfoobar : echo s.mocktoken'
+
+  run bash -c "source $PWD/hooks/environment && env"
+  assert_success
+  assert_output --partial "FOO_VAULT_TOKEN=s.mocktoken"
+
+  unset BUILDKITE_PIPELINE_SLUG
+  unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR
+  unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ENV_PREFIX
+}
