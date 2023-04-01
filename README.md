@@ -13,14 +13,17 @@ Add the following to your `pipeline.yml`:
 steps:
   - command: ./run_build.sh
     plugins:
-      - planetscale/vault-oidc-auth#v1.0.0:
+      - planetscale/vault-oidc-auth#v1.0.1:
           vault_addr: "https://my-vault-server"  # required.
           path: auth/buildkite                   # optional. default "auth/buildkite"
           role: some-role                        # optional. default "$BUILDKITE_PIPELINE_SLUG"
           audience: vault                        # optional. default "vault"
+          env_prefix: DEV_                       # optional. default "". (prefix to add to VAULT_TOKEN env var name)
 ```
 
 If authentication is successful a `VAULT_TOKEN` is added to the environment.
+
+Setting the `env_prefix` will add a prefix to the `VAULT_TOKEN` environment variable.
 
 ## Vault Configuration
 
