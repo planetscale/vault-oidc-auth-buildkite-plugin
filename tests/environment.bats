@@ -38,6 +38,7 @@ load '/usr/local/lib/bats/load.bash'
   export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_PATH="auth/jwt"
   export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ROLE="bar"
   export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_AUDIENCE="my-aud"
+  export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_SET_VAULT_ADDR="false"
 
   stub buildkite-agent \
     'oidc request-token --audience my-aud : echo eyJfoobar'
@@ -48,6 +49,7 @@ load '/usr/local/lib/bats/load.bash'
   run bash -c "source $PWD/hooks/environment && env"
   assert_success
   assert_output --partial "VAULT_TOKEN=s.mocktoken"
+  refute_output --regexp "^VAULT_ADDR=http://vault:8200$"
 
   unset BUILDKITE_PIPELINE_SLUG
   unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR
@@ -60,6 +62,7 @@ load '/usr/local/lib/bats/load.bash'
   export BUILDKITE_PIPELINE_SLUG="foo"
   export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR="http://vault:8200"
   export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ENV_PREFIX="FOO_"
+  export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_SET_VAULT_ADDR="true"
 
   stub buildkite-agent \
     'oidc request-token --audience vault : echo eyJfoobar'
@@ -70,8 +73,10 @@ load '/usr/local/lib/bats/load.bash'
   run bash -c "source $PWD/hooks/environment && env"
   assert_success
   assert_output --partial "FOO_VAULT_TOKEN=s.mocktoken"
+  assert_output --partial "FOO_VAULT_ADDR=http://vault:8200"
 
   unset BUILDKITE_PIPELINE_SLUG
   unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR
   unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ENV_PREFIX
+  unset BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_SET_VAULT_ADDR
 }

@@ -14,6 +14,7 @@ main() {
   local role="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ROLE:-$BUILDKITE_PIPELINE_SLUG}"
   local audience="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_AUDIENCE:-vault}"
   local prefix="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ENV_PREFIX:-}"
+  local set_vault_addr="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_SET_VAULT_ADDR:-true}"
 
   local jwt vault_token
 
@@ -33,6 +34,10 @@ main() {
   )
   echo -e "~~~ :vault: ${brown}Vault OIDC Auth Plugin${reset}: ${green}OK${reset}: ${prefix}VAULT_TOKEN added to the environment."
   export "${prefix}VAULT_TOKEN"="$vault_token"
+
+  if [[ "$set_vault_addr" =~ ^(true|1|yes)$ ]]; then
+    export "${prefix}VAULT_ADDR"="$addr"
+  fi
 }
 
 main "$@"
