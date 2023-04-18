@@ -16,6 +16,8 @@ configuration:
       type: string
     env_prefix:
       type: string
+    set_vault_addr:
+      type: boolean
   required:
     - vault_addr
   additionalProperties: false
