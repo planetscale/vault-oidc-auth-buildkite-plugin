@@ -19,7 +19,7 @@ main() {
   local jwt vault_token
 
   if [[ -z "$addr" ]]; then
-    echo -e "~~~ :vault: ${brown}Vault OIDC Auth Plugin${reset}. No 'vault_addr' specified. ${red}Skipping Vault authentication.${reset}"
+    echo -e "~~~ :vault: ${brown}Vault Buildkite OIDC Auth Plugin${reset}. No 'vault_addr' specified. ${red}Skipping Vault authentication.${reset}"
     exit 0
   fi
 
@@ -32,7 +32,7 @@ main() {
     role="$role" \
     jwt="$jwt"
   )
-  echo -e "~~~ :vault: ${brown}Vault OIDC Auth Plugin${reset}: ${green}OK${reset}: ${prefix}VAULT_TOKEN added to the environment."
+  echo -e "~~~ :vault: ${brown}Vault Buildkite OIDC Auth Plugin${reset}: ${green}OK${reset}: ${prefix}VAULT_TOKEN added to the environment."
   export "${prefix}VAULT_TOKEN"="$vault_token"
 
   if [[ "$set_vault_addr" =~ ^(true|1|yes)$ ]]; then
