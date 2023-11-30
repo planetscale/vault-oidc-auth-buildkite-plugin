@@ -1,7 +1,7 @@
 version: '2'
 services:
   lint-shellcheck:
-    image: koalaman/shellcheck-alpine:v0.8.0
+    image: koalaman/shellcheck-alpine:v0.8.0@sha256:f42fde76d2d14a645a848826e54a4d650150e151d9c81057c898da89a82c8a56
     volumes:
       - ".:/plugin:ro"
     entrypoint: sh
@@ -10,13 +10,13 @@ services:
       - 'shellcheck /plugin/hooks/*'
 
   lint-plugin:
-    image: buildkite/plugin-linter:v2.0.2
+    image: buildkite/plugin-linter:v2.0.2@sha256:438fe9fd6553469de9b9702d1db46886fee7ce2e474c915a0327a044f30677de
     volumes:
       - ".:/plugin:ro"
     command:
       - --id=planetscale/vault-oidc-auth
 
   tests:
-    image: buildkite/plugin-tester:v4.0.0
+    image: buildkite/plugin-tester:v4.0.0@sha256:73958fc0768b18ec691e9def050dbc25f814411c9901abfac8cd1f2f361ce8d5
     volumes:
       - ".:/plugin:ro"
