@@ -10,7 +10,7 @@ services:
       - 'shellcheck /plugin/hooks/*'
 
   lint-plugin:
-    image: buildkite/plugin-linter:v2.0.2@sha256:438fe9fd6553469de9b9702d1db46886fee7ce2e474c915a0327a044f30677de
+    image: buildkite/plugin-linter:v2.0.4@sha256:7c5ab788c569585723f4a5a9e701e23feb385b8ccdd083e76cf0e85b6d490b32
     volumes:
       - ".:/plugin:ro"
     command:
