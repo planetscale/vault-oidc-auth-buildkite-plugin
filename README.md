@@ -18,14 +18,13 @@ steps:
           path: auth/buildkite                   # optional. default "auth/buildkite"
           role: some-role                        # optional. default "$BUILDKITE_PIPELINE_SLUG"
           audience: vault                        # optional. default "vault"
-          env_prefix: DEV_                       # optional. default "". (prefix to add to VAULT_TOKEN env var name)
+          env_prefix: DEV_                       # optional. default "". (prefix to add to exported env variable names)
           set_vault_addr: false                  # optional. default "true". (set VAULT_ADDR env var to the value of 'vault_addr')
 ```
 
-If authentication is successful a `VAULT_TOKEN` is added to the environment, as
-well as `VAULT_ADDR` if `set_vault_addr` is true.
+If authentication is successful a `VAULT_TOKEN` is added to the environment, as well as `VAULT_ADDR` if `set_vault_addr` is true.
 
-Setting the `env_prefix` will add a prefix to the `VAULT_TOKEN` environment variable.
+Setting the `env_prefix` will add a prefix to the exported `VAULT_TOKEN` and `VAULT_ADDR` environment variables, eg: `enf_prefix: PROD_` will result in `PROD_VAULT_TOKEN` and `PROD_VAULT_ADDR`.
 
 ## Vault Configuration
 
