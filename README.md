@@ -13,7 +13,7 @@ Add the following to your `pipeline.yml`:
 steps:
   - command: ./run_build.sh
     plugins:
-      - planetscale/vault-oidc-auth#v1.1.0:
+      - planetscale/vault-oidc-auth#v1.1.1:
           vault_addr: "https://my-vault-server"  # required.
           path: auth/buildkite                   # optional. default "auth/buildkite"
           role: some-role                        # optional. default "$BUILDKITE_PIPELINE_SLUG"
@@ -35,16 +35,28 @@ vault auth enable -path=buildkite jwt
 vault write auth/buildkite/config jwks_url=https://agent.buildkite.com/.well-known/jwks
 ```
 
-Create an auth role for a pipeline. Do this for each pipeline you wish to authenticate to Vault:
+Get your Buildkite organization ID from the [GraphQL console](https://buildkite.com/user/graphql/console):
+
+```
+query getOrganizationID {organization(slug: "planetscale") {uuid}}
+```
+
+Create an auth role for a pipeline including the organization ID from above. Do this for each pipeline you wish to authenticate to Vault:
 
 ```console
-vault write auth/buildkite/role/my-repo \
-  bound_audiences=vault \
-  policies=default \
-  user_claim=pipeline_slug \
-  role_type=jwt \
-  token_type=batch \
-  token_explicit_max_ttl=2h
+vault write auth/buildkite/role/my-repo -<<EOF
+{
+  "bound_audiences": ["vault"],
+  "policies": ["default"],
+  "user_claim": "pipeline_slug",
+  "bound_claims": {
+    "organization_id": ["ORG_ID_GOES_HERE"]
+  },
+  "role_type": "jwt",
+  "token_type": "batch",
+  "token_explicit_max_ttl": "2h"
+}
+EOF
 ```
 
 ## Developing
