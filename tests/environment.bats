@@ -19,7 +19,7 @@ load "${BATS_PLUGIN_PATH}/load.bash"
   export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_VAULT_ADDR="http://vault:8200"
 
   stub buildkite-agent \
-    'oidc request-token --audience vault : echo eyJfoobar'
+    'oidc request-token --audience vault --claim "organization_id" : echo eyJfoobar'
 
   stub vault \
     'write -field=token -address=http://vault:8200 auth/buildkite/login role=foo jwt=eyJfoobar : echo s.mocktoken'
@@ -41,7 +41,7 @@ load "${BATS_PLUGIN_PATH}/load.bash"
   export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_SET_VAULT_ADDR="false"
 
   stub buildkite-agent \
-    'oidc request-token --audience my-aud : echo eyJfoobar'
+    'oidc request-token --audience my-aud --claim "organization_id" : echo eyJfoobar'
 
   stub vault \
     'write -field=token -address=http://vault:8200 auth/jwt/login role=bar jwt=eyJfoobar : echo s.mocktoken'
@@ -65,7 +65,7 @@ load "${BATS_PLUGIN_PATH}/load.bash"
   export BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_SET_VAULT_ADDR="true"
 
   stub buildkite-agent \
-    'oidc request-token --audience vault : echo eyJfoobar'
+    'oidc request-token --audience vault --claim "organization_id" : echo eyJfoobar'
 
   stub vault \
     'write -field=token -address=http://vault:8200 auth/buildkite/login role=foo jwt=eyJfoobar : echo s.mocktoken'

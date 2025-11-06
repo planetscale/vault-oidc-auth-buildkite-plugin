@@ -23,7 +23,7 @@ main() {
     exit 0
   fi
 
-  jwt=$(buildkite-agent oidc request-token --audience "$audience")
+  jwt=$(buildkite-agent oidc request-token --audience "$audience" --claim "organization_id")
 
   vault_token=$(vault write \
     -field=token \
