@@ -50,7 +50,8 @@ vault write auth/buildkite/role/my-repo -<<EOF
   "policies": ["default"],
   "user_claim": "pipeline_slug",
   "bound_claims": {
-    "organization_id": ["ORG_ID_GOES_HERE"]
+    "organization_id": ["ORG_ID_GOES_HERE"],
+    "pipeline_slug": "my-repo"
   },
   "role_type": "jwt",
   "token_type": "batch",
