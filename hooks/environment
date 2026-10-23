@@ -15,6 +15,7 @@ main() {
   local audience="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_AUDIENCE:-vault}"
   local prefix="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_ENV_PREFIX:-}"
   local set_vault_addr="${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_SET_VAULT_ADDR:-true}"
+  local claims="organization_id${BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_CLAIMS:+,$BUILDKITE_PLUGIN_VAULT_OIDC_AUTH_CLAIMS}"
 
   local jwt vault_token
 
@@ -23,7 +24,7 @@ main() {
     exit 0
   fi
 
-  jwt=$(buildkite-agent oidc request-token --audience "$audience" --claim "organization_id")
+  jwt=$(buildkite-agent oidc request-token --audience "$audience" --claim "$claims")
 
   vault_token=$(vault write \
     -field=token \

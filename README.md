@@ -20,9 +20,12 @@ steps:
           audience: vault                        # optional. default "vault"
           env_prefix: DEV_                       # optional. default "". (prefix to add to exported env variable names)
           set_vault_addr: false                  # optional. default "true". (set VAULT_ADDR env var to the value of 'vault_addr')
+          claims: agent_tag:queue,build_source   # optional. extra OIDC claims to request, comma-separated. "organization_id" is always included.
 ```
 
 If authentication is successful a `VAULT_TOKEN` is added to the environment, as well as `VAULT_ADDR` if `set_vault_addr` is true.
+
+`claims` adds optional Buildkite OIDC claims to the token so a Vault role can bind on them with `bound_claims`, for example `agent_tag:queue` to restrict a role to jobs that ran on one agent queue. See `buildkite-agent oidc request-token --help` for the available claims.
 
 Setting the `env_prefix` will add a prefix to the exported `VAULT_TOKEN` and `VAULT_ADDR` environment variables, eg: `enf_prefix: PROD_` will result in `PROD_VAULT_TOKEN` and `PROD_VAULT_ADDR`.
 
