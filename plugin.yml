@@ -18,6 +18,8 @@ configuration:
       type: string
     set_vault_addr:
       type: boolean
+    claims:
+      type: string
   required:
     - vault_addr
   additionalProperties: false
